@@ -1,4 +1,4 @@
-The Shell Enviroment Artificial Neural Network(ShEANN) is a curiosity driven DQN that explores command line envioments.
+The Shell Exploration Artificial Neural Network(ShEANN) is a curiosity driven DQN that explores command line envioments.
 
 Disclaimers:
 1. This is incomplete
