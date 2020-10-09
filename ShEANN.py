@@ -10,7 +10,7 @@ from rl.agents import SARSAAgent
 from rl.policy import BoltzmannQPolicy
 import os
 
-cmd = 'dir' if os.name =='nt' else 'ls'
+cmd = 'dir' if os.name == 'nt' else 'ls'
 env_reward = 0
 error_penalty = 0
 len_penalty = .1
@@ -52,11 +52,12 @@ while True:
                         env_reward -= repeat_penalty
         idxs = np.frombuffer(nnin.encode(), dtype=np.uint8) - 97
         env = tf.one_hot(idxs, 256)
-        print('#'+cmd)
+        print('#' + cmd)
         print(stdout)
         cmd = ''
         shape = env.shape
     env_reward -= len_penalty
+
 
     def build_actor_model(shape, nb_actions):
         model = Sequential()
@@ -70,6 +71,7 @@ while True:
         model.add(Dense(nb_actions, name='output', activation='softmax'))
         return model
 
+
     def build_main(shape, name_prefix='main.'):
         inputs = Input(shape=shape)
         x = inputs
@@ -80,6 +82,7 @@ while True:
         model = Model(inputs, x, name=name_prefix + 'main')
         return model
 
+
     def build_inverse_model(main1, main2, nb_actions):
         obs1 = main1
         obs2 = main2
@@ -89,6 +92,7 @@ while True:
         x = Dense(nb_actions, name='icm_i.output', activation='sigmoid')(x)
         i_model = Model([obs1.input, obs2.input], x, name='icm_inverse_model')
         return i_model
+
 
     def build_forward_model(main, nb_actions):
         obs1 = main
@@ -101,6 +105,7 @@ while True:
         x = Dense(output_shape, name='icm_f.output', activation='linear')(x)
         f_model = Model([obs1.input, act1], x, name='icm_forward_model')
         return f_model
+
 
     inv_weights_fname = '{}_inv_weights.h5f'.format("SMB")
     fwd_weights_fname = '{}_fwd_weights.h5f'.format("SMB")
@@ -138,10 +143,12 @@ while True:
     obs_last = obs_now
     r_intr = (fwd_loss[0] ** 0.5) / 100
     reward = r_intr + env_reward
-    if action+32 != 130:
-        if action+32 == 129:
+
+    enc_ascii = action+32
+    if enc_ascii != 130:
+        if enc_ascii == 129:
             proc.send_signal(signal.CTRL_C_EVENT if os.name == 'nt' else signal.SIGINT)
-        cmd += chr(action + 32)
+        cmd += chr(enc_ascii)
         inverse_model.save_weights(inv_weights_fname, overwrite=True)
         forward_model.save_weights(fwd_weights_fname, overwrite=True)
         agent.save_weights(agent_weights_fname, overwrite=True)
