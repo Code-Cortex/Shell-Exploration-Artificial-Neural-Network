@@ -5,5 +5,5 @@ Disclaimers:
 2. The Neural Network's limits are set by user permissions(if you run this as root, it has the ability to delete every file on your computer)
 YOU HAVE BEEN WARNED!
 
-Acknowledgements:
+Acknowledgements:<br />
 Thank you to jfaubertin, your project "keras-curiosity" was an excelent starting point and guide for my project.
