@@ -51,8 +51,8 @@ while True:
                         env_reward += learning_reward
                     else:
                         env_reward -= repeat_penalty
-        idxs = np.frombuffer(nnin.encode(), dtype=np.uint8) - 97
-        env = tf.one_hot(idxs, 256)
+        idxs = np.frombuffer(nnin.encode(), dtype=np.uint8) - 32
+        env = tf.one_hot(idxs, 94)
         print('\n')
         print(stdout)
         print('# ', end='')
