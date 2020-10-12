@@ -25,7 +25,7 @@ learning_rate = 0.005
 fc1_units = 64
 fc2_units = 128
 fc3_units = 256
-nb_actions = 99
+nb_actions = 97
 
 tf.get_logger().setLevel('ERROR')
 done = True
@@ -149,10 +149,11 @@ while True:
     clear_session()
 
     enc_ascii = action + 32
-    if enc_ascii != 130:
-        if enc_ascii == 129:
+    if enc_ascii != 128:
+        if enc_ascii < 127:
+            cmd += chr(enc_ascii)
+        if enc_ascii == 127:
             proc.send_signal(signal.CTRL_C_EVENT if os.name == 'nt' else signal.SIGINT)
-        cmd += chr(enc_ascii)
         print(cmd[-1], end='')
         done = False
         continue
