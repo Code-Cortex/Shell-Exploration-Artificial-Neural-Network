@@ -22,9 +22,6 @@ hidden_layers = 2
 IO_units = 256
 hidden_units = 512
 learning_rate = 0.005
-fc1_units = 64
-fc2_units = 128
-fc3_units = 256
 nb_actions = 97
 
 tf.get_logger().setLevel('ERROR')
@@ -68,8 +65,6 @@ while True:
         for layer in range(2, hidden_layers):
             model.add(GRU(hidden_units, name='GRU' + str(layer), return_sequences=True))
         model.add(GRU(IO_units, name='GRU' + str(hidden_layers)))
-        model.add(Dense(fc1_units, name='fc1', activation='relu'))
-        model.add(Dense(fc2_units, name='fc2', activation='relu'))
         model.add(Dense(nb_actions, name='output', activation='softmax'))
         return model
 
@@ -89,8 +84,6 @@ while True:
         obs1 = main1
         obs2 = main2
         x = Concatenate()([obs1.output, obs2.output])
-        x = Dense(fc1_units, name='icm_i.fc1', activation='relu')(x)
-        x = Dense(fc2_units, name='icm_i.fc2', activation='relu')(x)
         x = Dense(nb_actions, name='icm_i.output', activation='sigmoid')(x)
         i_model = Model([obs1.input, obs2.input], x, name='icm_inverse_model')
         return i_model
@@ -100,9 +93,6 @@ while True:
         obs1 = main
         act1 = Input(shape=nb_actions)
         x = Concatenate()([obs1.output, act1])
-        x = Dense(fc1_units, name='icm_f.fc1', activation='relu')(x)
-        x = Dense(fc2_units, name='icm_f.fc2', activation='relu')(x)
-        x = Dense(fc3_units, name='icm_f.fc3', activation='relu')(x)
         output_shape = obs1.output_shape[1]
         x = Dense(output_shape, name='icm_f.output', activation='linear')(x)
         f_model = Model([obs1.input, act1], x, name='icm_forward_model')
