@@ -11,7 +11,7 @@ from rl.agents import SARSAAgent
 from rl.policy import BoltzmannQPolicy
 import os
 
-cmd = 'dir' if os.name == 'nt' else 'ls'
+cmd = 'echo Hello World!'
 env_reward = 0
 error_penalty = 0
 len_penalty = .1
