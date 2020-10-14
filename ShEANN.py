@@ -14,7 +14,7 @@ import os
 cmd = 'echo Hello World!'
 env_reward = 0
 error_penalty = 0
-len_penalty = .1
+length_penalty = .1
 repeat_penalty = 0
 learning_reward = 10
 
@@ -55,7 +55,7 @@ while True:
         print('# ', end='')
         cmd = ''
         shape = env.shape
-    env_reward -= len_penalty
+    env_reward -= length_penalty
 
 
     def build_actor_model(shape, nb_actions):
