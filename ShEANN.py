@@ -144,7 +144,8 @@ while True:
             cmd += chr(enc_ascii)
         if enc_ascii == 127:
             proc.send_signal(signal.CTRL_C_EVENT if os.name == 'nt' else signal.SIGINT)
-        print(cmd[-1], end='')
+        if cmd:
+        	print(cmd[-1], end='')
         done = False
         continue
     inverse_model.save_weights(inv_weights_fname, overwrite=True)
