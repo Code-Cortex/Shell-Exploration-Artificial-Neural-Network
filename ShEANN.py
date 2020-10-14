@@ -13,9 +13,7 @@ import os
 
 cmd = 'echo Hello World!'
 env_reward = 0
-error_penalty = 0
 length_penalty = .1
-repeat_penalty = 0
 learning_reward = 10
 
 hidden_layers = 2
@@ -38,16 +36,12 @@ while True:
         nnin = ''.join(char for char in stdout if char.isprintable())
         filename = Path('mem.txt')
         filename.touch(exist_ok=True)
-        if exitcode > 0:
-            env_reward -= error_penalty
-        else:
+        if exitcode == 0:
             with open('mem.txt', 'r+') as mem:
                 for line in stdout.splitlines():
                     if line + '\n' not in mem:
                         mem.write(line + '\n')
                         env_reward += learning_reward
-                    else:
-                        env_reward -= repeat_penalty
         idxs = np.frombuffer(nnin.encode(), dtype=np.uint8) - 32
         env = tf.one_hot(idxs, 94)
         print('\n')
