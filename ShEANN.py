@@ -74,9 +74,7 @@ while True:
         return model
 
 
-    def build_inverse_model(main1, main2, nb_actions):
-        obs1 = main1
-        obs2 = main2
+    def build_inverse_model(obs1, obs2, nb_actions):
         x = Concatenate()([obs1.output, obs2.output])
         x = Dense(nb_actions, name='icm_i.output', activation='sigmoid')(x)
         i_model = Model([obs1.input, obs2.input], x, name='icm_inverse_model')
@@ -100,6 +98,7 @@ while True:
     main = build_main(shape)
     main2 = build_main(shape, name_prefix='main2.')
     inverse_model = build_inverse_model(main, main2, nb_actions)
+    inverse_model.summary()
     inverse_model.compile(Adam(learning_rate), loss='mse', metrics=['mse'])
     forward_model = build_forward_model(main, nb_actions)
     forward_model.compile(Adam(learning_rate), loss='mse', metrics=['mse'])
