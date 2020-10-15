@@ -81,8 +81,7 @@ while True:
         return i_model
 
 
-    def build_forward_model(main, nb_actions):
-        obs1 = main
+    def build_forward_model(obs1, nb_actions):
         act1 = Input(shape=nb_actions)
         x = Concatenate()([obs1.output, act1])
         output_shape = obs1.output_shape[1]
