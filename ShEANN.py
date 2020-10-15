@@ -98,7 +98,6 @@ while True:
     main = build_main(shape)
     main2 = build_main(shape, name_prefix='main2.')
     inverse_model = build_inverse_model(main, main2, nb_actions)
-    inverse_model.summary()
     inverse_model.compile(Adam(learning_rate), loss='mse', metrics=['mse'])
     forward_model = build_forward_model(main, nb_actions)
     forward_model.compile(Adam(learning_rate), loss='mse', metrics=['mse'])
