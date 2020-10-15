@@ -74,8 +74,8 @@ while True:
         return model
 
 
-    def build_inverse_model(main, main2, nb_actions):
-        obs1 = main
+    def build_inverse_model(main1, main2, nb_actions):
+        obs1 = main1
         obs2 = main2
         x = Concatenate()([obs1.output, obs2.output])
         x = Dense(nb_actions, name='icm_i.output', activation='sigmoid')(x)
