@@ -27,8 +27,6 @@ done = True
 obs_last = None
 
 while True:
-    if not cmd:
-        done = False
     if done:
         proc = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True)
         stdout = proc.stdout.read().decode('utf-8')
@@ -36,6 +34,9 @@ while True:
         nnin = ''.join(char for char in stdout if char.isprintable())
         filename = Path('mem.txt')
         filename.touch(exist_ok=True)
+        if not nnin:
+            nnin = 'Done'
+            stdout = nnin
         if exitcode == 0:
             with open('mem.txt', 'r+') as mem:
                 for line in stdout.splitlines():
