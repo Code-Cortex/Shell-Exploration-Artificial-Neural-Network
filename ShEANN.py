@@ -13,7 +13,7 @@ import os
 
 cmd = 'echo Hello World!'
 env_reward = 0
-length_penalty = .1
+length_penalty = .25
 learning_reward = 10
 
 hidden_layers = 2
