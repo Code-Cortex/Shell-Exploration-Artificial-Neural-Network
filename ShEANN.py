@@ -35,7 +35,7 @@ while True:
         filename = Path('mem.txt')
         filename.touch(exist_ok=True)
         if not nnin:
-            nnin = 'Done'
+            nnin = 'Done!'
             stdout = nnin
         if exitcode == 0:
             with open('mem.txt', 'r+') as mem:
