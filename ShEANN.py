@@ -36,6 +36,7 @@ while True:
         except TimeoutExpired:
             proc.kill()
             stdout = proc.communicate()[0].decode()
+            exitcode = proc.returncode
         nnin = ''.join(char for char in stdout if char.isprintable())
         filename = Path('mem.txt')
         filename.touch(exist_ok=True)
