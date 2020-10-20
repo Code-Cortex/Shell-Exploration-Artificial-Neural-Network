@@ -31,7 +31,6 @@ while True:
         try:
             stdout = proc.communicate(timeout=.1)[0].decode()
             exitcode = proc.returncode
-            print(exitcode)
         except TimeoutExpired:
             proc.kill()
             stdout = proc.communicate()[0].decode()
