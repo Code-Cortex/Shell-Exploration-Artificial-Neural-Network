@@ -4,7 +4,6 @@ from keras.optimizers import Adam
 from keras.backend import clear_session
 from pathlib import Path
 from subprocess import Popen, PIPE, STDOUT, TimeoutExpired
-import signal
 import numpy as np
 import tensorflow as tf
 from rl.agents import SARSAAgent
