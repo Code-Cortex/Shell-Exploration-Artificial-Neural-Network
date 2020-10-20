@@ -3,7 +3,8 @@ from keras.layers import Input, Concatenate, GRU, Dense, Reshape
 from keras.optimizers import Adam
 from keras.backend import clear_session
 from pathlib import Path
-from subprocess import getstatusoutput, getoutput
+from subprocess import Popen, PIPE, STDOUT, TimeoutExpired
+import signal
 import numpy as np
 import tensorflow as tf
 from rl.agents import SARSAAgent
@@ -19,7 +20,7 @@ hidden_layers = 2
 IO_units = 256
 hidden_units = 512
 learning_rate = 0.005
-nb_actions = 96
+nb_actions = 97
 
 tf.get_logger().setLevel('ERROR')
 done = True
@@ -27,19 +28,27 @@ obs_last = None
 
 while True:
     if done:
-        stdout = getoutput(cmd)
-        exitcode = int(str(getstatusoutput(cmd))[1])
+        proc = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True)
+        try:
+            stdout = proc.communicate(timeout=.1)[0].decode()
+            exitcode = proc.returncode
+            print(exitcode)
+        except TimeoutExpired:
+            proc.kill()
+            stdout = proc.communicate()[0].decode()
+        nnin = ''.join(char for char in stdout if char.isprintable())
         filename = Path('mem.txt')
         filename.touch(exist_ok=True)
-        if not stdout:
-            stdout = 'Done!'
+        if not nnin:
+            nnin = 'Done!'
+            stdout = nnin
         if exitcode == 0:
             with open('mem.txt', 'r+') as mem:
                 for line in stdout.splitlines():
                     if line + '\n' not in mem:
                         mem.write(line + '\n')
                         env_reward += learning_reward
-        idxs = np.frombuffer(stdout.encode(), dtype=np.uint8) - 32
+        idxs = np.frombuffer(nnin.encode(), dtype=np.uint8) - 32
         env = tf.one_hot(idxs, 94)
         print('\n')
         print(stdout)
@@ -132,7 +141,6 @@ while True:
         print(cmd[-1], end='')
         done = False
         continue
-    cmd += '&'
     inverse_model.save_weights(inv_weights_fname, overwrite=True)
     forward_model.save_weights(fwd_weights_fname, overwrite=True)
     agent.save_weights(agent_weights_fname, overwrite=True)
