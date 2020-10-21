@@ -29,7 +29,7 @@ while True:
     if done:
         proc = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True)
         try:
-            stdout = proc.communicate(timeout=.1)[0].decode()
+            stdout = proc.communicate(timeout=1)[0].decode()
             exitcode = proc.returncode
         except TimeoutExpired:
             proc.kill()
