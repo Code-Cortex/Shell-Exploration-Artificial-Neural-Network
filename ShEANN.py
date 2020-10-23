@@ -53,6 +53,7 @@ while True:
         print('# ', end='')
     else:
         nnin = cmd
+        print(nnin[-1], end='')
     idxs = np.frombuffer(nnin.encode(), dtype=np.uint8) - 32
     env = tf.one_hot(idxs, 94)
     shape = env.shape
@@ -139,7 +140,6 @@ while True:
     enc_ascii = action + 32
     if enc_ascii != 127:
         cmd += chr(enc_ascii)
-        print(cmd[-1], end='')
         done = False
         continue
     inverse_model.save_weights(inv_weights_fname, overwrite=True)
