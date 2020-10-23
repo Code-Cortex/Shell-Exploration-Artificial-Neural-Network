@@ -47,13 +47,15 @@ while True:
                     if line + '\n' not in mem:
                         mem.write(line + '\n')
                         env_reward += learning_reward
-        idxs = np.frombuffer(nnin.encode(), dtype=np.uint8) - 32
-        env = tf.one_hot(idxs, 94)
+        cmd = ''
         print('\n')
         print(stdout)
         print('# ', end='')
-        cmd = ''
-        shape = env.shape
+    else:
+        nnin = cmd
+    idxs = np.frombuffer(nnin.encode(), dtype=np.uint8) - 32
+    env = tf.one_hot(idxs, 94)
+    shape = env.shape
     env_reward -= length_penalty
 
 
