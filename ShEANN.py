@@ -18,7 +18,7 @@ learning_reward = 10
 hidden_layers = 2
 IO_units = 256
 hidden_units = 512
-learning_rate = 0.01
+learning_rate = 0.001
 nb_actions = 96
 
 tf.get_logger().setLevel('ERROR')
