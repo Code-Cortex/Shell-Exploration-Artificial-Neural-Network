@@ -22,11 +22,12 @@ learning_rate = 0.001
 nb_actions = 96
 
 tf.get_logger().setLevel('ERROR')
-done = True
+done = False
+cmd_in = True
 obs_last = None
 
 while True:
-    if done:
+    if cmd_in:
         proc = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True)
         try:
             stdout = proc.communicate(timeout=1)[0].decode()
@@ -47,6 +48,7 @@ while True:
                     if line + '\n' not in mem:
                         mem.write(line + '\n')
                         env_reward += learning_reward
+                        done = True
         cmd = ''
         print('\n')
         print(stdout)
@@ -140,9 +142,12 @@ while True:
     enc_ascii = action + 32
     if enc_ascii != 127:
         cmd += chr(enc_ascii)
-        done = False
+        cmd_in = False
         continue
-    inverse_model.save_weights(inv_weights_fname, overwrite=True)
-    forward_model.save_weights(fwd_weights_fname, overwrite=True)
-    agent.save_weights(agent_weights_fname, overwrite=True)
-    done = True
+    else:
+        cmd_in = True
+    if done:
+        inverse_model.save_weights(inv_weights_fname, overwrite=True)
+        forward_model.save_weights(fwd_weights_fname, overwrite=True)
+        agent.save_weights(agent_weights_fname, overwrite=True)
+        done = False
