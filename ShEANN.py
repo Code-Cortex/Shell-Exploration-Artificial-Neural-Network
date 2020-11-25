@@ -43,12 +43,12 @@ while True:
             nnin = 'Done!'
             stdout = nnin
         if exitcode == 0:
+            done = True
             with open('mem.txt', 'r+') as mem:
                 for line in stdout.splitlines():
                     if line + '\n' not in mem:
                         mem.write(line + '\n')
                         env_reward += learning_reward
-                        done = True
         cmd = ''
         print('\n')
         print(stdout)
