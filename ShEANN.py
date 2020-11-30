@@ -56,7 +56,7 @@ while True:
         nnin = cmd
         print(nnin[-1], end='')
     idxs = np.frombuffer(nnin.encode(), dtype=np.uint8) - 32
-    env = tf.one_hot(idxs, 94)
+    env = tf.one_hot(idxs, 95)
     shape = env.shape
     env_reward -= length_penalty
 
