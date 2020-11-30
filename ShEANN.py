@@ -15,9 +15,8 @@ env_reward = 0
 length_penalty = .25
 learning_reward = 10
 
-hidden_layers = 1022
-IO_units = 1024
-hidden_units = 1024
+layers = 1024
+layer_neurons = 1024
 learning_rate = 0.001
 nb_actions = 96
 
@@ -65,10 +64,8 @@ while True:
     def build_actor_model(shape, nb_actions):
         model = Sequential()
         model.add(Reshape(shape[1::], input_shape=shape))
-        model.add(GRU(IO_units, input_shape=shape, name='GRU1', return_sequences=True))
-        for layer in range(2, hidden_layers):
-            model.add(GRU(hidden_units, name='GRU' + str(layer), return_sequences=True))
-        model.add(GRU(IO_units, name='GRU' + str(hidden_layers)))
+        for layer in range(layers):
+            model.add(GRU(layer_neurons, name='GRU' + str(layer), return_sequences=True))
         model.add(Dense(nb_actions, name='output', activation='softmax'))
         return model
 
@@ -76,10 +73,8 @@ while True:
     def build_main(shape, name_prefix='main.'):
         inputs = Input(shape=shape)
         x = inputs
-        x = GRU(IO_units, name=name_prefix + 'GRU1', return_sequences=True)(x)
-        for layer in range(2, hidden_layers):
-            x = GRU(hidden_units, name=name_prefix + ('GRU' + str(layer)), return_sequences=True)(x)
-        x = GRU(IO_units, name=name_prefix + ('GRU' + str(hidden_layers)))(x)
+        for layer in range(layers):
+            x = GRU(layer_neurons, name=name_prefix + ('GRU' + str(layer)), return_sequences=True)(x)
         model = Model(inputs, x, name=name_prefix + 'main')
         return model
 
