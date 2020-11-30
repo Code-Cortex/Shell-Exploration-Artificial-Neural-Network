@@ -15,9 +15,9 @@ env_reward = 0
 length_penalty = .25
 learning_reward = 10
 
-hidden_layers = 2
-IO_units = 256
-hidden_units = 512
+hidden_layers = 1022
+IO_units = 1024
+hidden_units = 1024
 learning_rate = 0.001
 nb_actions = 96
 
