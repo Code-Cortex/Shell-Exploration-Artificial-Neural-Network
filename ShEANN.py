@@ -62,6 +62,7 @@ while True:
     shape = env.shape
     env_reward -= length_penalty
 
+
     def build_actor_model(shape, nb_actions):
         model = Sequential()
         model.add(Reshape(shape[1::], input_shape=shape))
@@ -70,6 +71,7 @@ while True:
         model.add(GRU(layer_neurons, name='GRU' + str(hidden_layers)))
         model.add(Dense(nb_actions, name='output', activation='softmax'))
         return model
+
 
     def build_main(shape, name_prefix='main.'):
         inputs = Input(shape=shape)
@@ -80,11 +82,13 @@ while True:
         model = Model(inputs, x, name=name_prefix + 'main')
         return model
 
+
     def build_inverse_model(obs1, obs2, nb_actions):
         x = Concatenate()([obs1.output, obs2.output])
         x = Dense(nb_actions, name='icm_i.output', activation='sigmoid')(x)
         i_model = Model([obs1.input, obs2.input], x, name='icm_inverse_model')
         return i_model
+
 
     def build_forward_model(obs1, nb_actions):
         act1 = Input(shape=nb_actions)
@@ -93,6 +97,7 @@ while True:
         x = Dense(output_shape, name='icm_f.output', activation='linear')(x)
         f_model = Model([obs1.input, act1], x, name='icm_forward_model')
         return f_model
+
 
     inv_weights_fname = '{}_inv_weights.h5f'.format("SMB")
     fwd_weights_fname = '{}_fwd_weights.h5f'.format("SMB")
@@ -126,9 +131,11 @@ while True:
     action = agent.forward(obs_now)
     icm_action = np.zeros(nb_actions)
     icm_action[action] = 1
-    inv_loss = inverse_model.train_on_batch([np.expand_dims(obs_last, 0), np.expand_dims(obs_now, 0)],[np.expand_dims(icm_action, 0)])
+    inv_loss = inverse_model.train_on_batch([np.expand_dims(obs_last, 0), np.expand_dims(obs_now, 0)],
+                                            [np.expand_dims(icm_action, 0)])
     features_now = main.predict(np.expand_dims(obs_now, 0))
-    fwd_loss = forward_model.train_on_batch([np.expand_dims(obs_last, 0), np.expand_dims(icm_action, 0)],[features_now])
+    fwd_loss = forward_model.train_on_batch([np.expand_dims(obs_last, 0), np.expand_dims(icm_action, 0)],
+                                            [features_now])
     obs_last = obs_now
     r_intr = (fwd_loss[0] ** 0.5) / 100
     reward = r_intr + env_reward
