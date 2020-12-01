@@ -21,9 +21,11 @@ learning_rate = 0.001
 nb_actions = 96
 
 tf.get_logger().setLevel('ERROR')
+
 done = False
 cmd_in = True
 obs_last = None
+initialize = True
 
 while True:
     if cmd_in:
@@ -108,13 +110,15 @@ while True:
     agent.compile(Adam(learning_rate), metrics=['mae'])
     agent.reset_states()
 
-    if os.path.isfile(inv_weights_fname):
-        inverse_model.load_weights(inv_weights_fname)
-    if os.path.isfile(fwd_weights_fname):
-        forward_model.load_weights(fwd_weights_fname)
-    if os.path.isfile(agent_weights_fname):
-        agent.load_weights(agent_weights_fname)
-        agent.training = True
+    if initialize:
+        if os.path.isfile(inv_weights_fname):
+            inverse_model.load_weights(inv_weights_fname)
+        if os.path.isfile(fwd_weights_fname):
+            forward_model.load_weights(fwd_weights_fname)
+        if os.path.isfile(agent_weights_fname):
+            agent.load_weights(agent_weights_fname)
+            agent.training = True
+        initialize = False
 
     obs_now = env
     if obs_last is None:
@@ -132,12 +136,13 @@ while True:
     clear_session()
     done = False
 
+    inverse_model.save_weights(inv_weights_fname, overwrite=True)
+    forward_model.save_weights(fwd_weights_fname, overwrite=True)
+    agent.save_weights(agent_weights_fname, overwrite=True)
+
     enc_ascii = action + 32
     if enc_ascii != 127:
         cmd += chr(enc_ascii)
         cmd_in = False
         continue
     cmd_in = True
-    inverse_model.save_weights(inv_weights_fname, overwrite=True)
-    forward_model.save_weights(fwd_weights_fname, overwrite=True)
-    agent.save_weights(agent_weights_fname, overwrite=True)
