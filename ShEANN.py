@@ -142,14 +142,13 @@ while True:
     agent.backward(reward, done)
     clear_session()
     done = False
-
-    inverse_model.save_weights(inv_weights_fname, overwrite=True)
-    forward_model.save_weights(fwd_weights_fname, overwrite=True)
-    agent.save_weights(agent_weights_fname, overwrite=True)
-
+    
     enc_ascii = action + 32
     if enc_ascii != 127:
         cmd += chr(enc_ascii)
         cmd_in = False
         continue
     cmd_in = True
+    inverse_model.save_weights(inv_weights_fname, overwrite=True)
+    forward_model.save_weights(fwd_weights_fname, overwrite=True)
+    agent.save_weights(agent_weights_fname, overwrite=True)
