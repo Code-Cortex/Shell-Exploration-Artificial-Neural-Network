@@ -56,7 +56,7 @@ while True:
         print('# ', end='')
     else:
         nnin = cmd
-        print(nnin[-1], end='')
+        print(nnin[-1], end='', flush=True)
     idxs = np.frombuffer(nnin.encode(), dtype=np.uint8) - 32
     env = tf.one_hot(idxs, 95)
     shape = env.shape
