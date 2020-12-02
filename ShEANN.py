@@ -53,7 +53,7 @@ while True:
         cmd = ''
         print('\n')
         print(stdout)
-        print('# ', end='')
+        print('# ', end='', flush=True)
     else:
         nnin = cmd
         print(nnin[-1], end='', flush=True)
