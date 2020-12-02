@@ -122,7 +122,7 @@ while True:
             forward_model.load_weights(fwd_weights_fname)
         if os.path.isfile(agent_weights_fname):
             agent.load_weights(agent_weights_fname)
-            agent.training = True
+        agent.training = True
         initialize = False
 
     obs_now = env
@@ -142,7 +142,7 @@ while True:
     agent.backward(reward, done)
     clear_session()
     done = False
-    
+
     enc_ascii = action + 32
     if enc_ascii != 127:
         cmd += chr(enc_ascii)
