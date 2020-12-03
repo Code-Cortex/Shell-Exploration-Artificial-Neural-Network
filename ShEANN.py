@@ -22,7 +22,7 @@ nb_actions = 96
 
 tf.get_logger().setLevel('ERROR')
 
-success = False
+done = False
 cmd_in = True
 obs_last = None
 initialize = True
@@ -44,7 +44,7 @@ while True:
             nnin = 'Done!'
             stdout = nnin
         if exitcode == 0:
-            success = True
+            done = True
             with open('mem.txt', 'r+') as mem:
                 for line in stdout.splitlines():
                     if line + '\n' not in mem:
@@ -139,9 +139,9 @@ while True:
     obs_last = obs_now
     r_intr = (fwd_loss[0] ** 0.5) / 100
     reward = r_intr + env_reward
-    agent.backward(reward, success)
+    agent.backward(reward, done)
     clear_session()
-    success = False
+    done = False
 
     enc_ascii = action + 32
     if enc_ascii != 127:
