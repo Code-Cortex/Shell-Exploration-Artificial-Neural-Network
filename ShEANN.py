@@ -10,7 +10,7 @@ from rl.agents import SARSAAgent
 from rl.policy import BoltzmannQPolicy
 import os
 
-gpu_train = False
+cpu_train = True
 
 cmd = 'echo Hello World!'
 env_reward = 0
@@ -22,7 +22,7 @@ layer_neurons = 512
 learning_rate = 0.001
 nb_actions = 96
 
-if not gpu_train:
+if cpu_train:
     os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 tf.get_logger().setLevel('ERROR')
 
