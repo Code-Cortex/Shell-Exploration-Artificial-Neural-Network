@@ -11,7 +11,7 @@ from rl.policy import BoltzmannQPolicy
 import os
 
 cmd = 'echo Hello World!'
-GPU_train = False
+gpu_train = False
 env_reward = 0
 length_penalty = .25
 learning_reward = 10
@@ -21,7 +21,7 @@ layer_neurons = 512
 learning_rate = 0.001
 nb_actions = 96
 
-if not GPU_train:
+if not gpu_train:
     os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 tf.get_logger().setLevel('ERROR')
 
