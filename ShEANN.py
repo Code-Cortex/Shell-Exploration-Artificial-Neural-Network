@@ -25,7 +25,6 @@ tf.get_logger().setLevel('ERROR')
 done = False
 cmd_in = True
 obs_last = None
-initialize = True
 
 while True:
     if cmd_in:
@@ -115,15 +114,14 @@ while True:
     agent.compile(Adam(learning_rate), metrics=['mae'])
     agent.reset_states()
 
-    if initialize:
-        if os.path.isfile(inv_weights_fname):
-            inverse_model.load_weights(inv_weights_fname)
-        if os.path.isfile(fwd_weights_fname):
-            forward_model.load_weights(fwd_weights_fname)
-        if os.path.isfile(agent_weights_fname):
-            agent.load_weights(agent_weights_fname)
-        agent.training = True
-        initialize = False
+    
+    if os.path.isfile(inv_weights_fname):
+        inverse_model.load_weights(inv_weights_fname)
+    if os.path.isfile(fwd_weights_fname):
+        forward_model.load_weights(fwd_weights_fname)
+    if os.path.isfile(agent_weights_fname):
+        agent.load_weights(agent_weights_fname)
+    agent.training = True
 
     obs_now = env
     if obs_last is None:
