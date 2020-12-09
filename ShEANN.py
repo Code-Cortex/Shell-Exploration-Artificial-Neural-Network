@@ -122,9 +122,9 @@ while True:
             forward_model.load_weights(fwd_weights_fname)
         if os.path.isfile(agent_weights_fname):
             agent.load_weights(agent_weights_fname)
-        agent.training = True
         initialize = False
-
+    agent.training = True
+    
     obs_now = env
     if obs_last is None:
         obs_last = obs_now
