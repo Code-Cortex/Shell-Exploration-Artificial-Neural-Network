@@ -10,7 +10,7 @@ from rl.agents import SARSAAgent
 from rl.policy import BoltzmannQPolicy
 import os
 
-cmd = 'echo Hello World'
+cmd = 'echo Hello World!'
 env_reward = 0
 length_penalty = .25
 learning_reward = 10
