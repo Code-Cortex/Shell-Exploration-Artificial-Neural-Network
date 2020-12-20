@@ -57,8 +57,8 @@ while True:
     else:
         nnin = cmd
         print(nnin[-1], end='', flush=True)
-    idxs = np.frombuffer(nnin.encode(), dtype=np.uint8) - 32
-    env = tf.one_hot(idxs, 95)
+    idxs = (np.frombuffer(nnin.encode(), dtype=np.uint8) - 32) / 100 
+    env = tf.reshape(idxs, idxs.shape + (1,))
     shape = env.shape
     env_reward -= length_penalty
 
@@ -124,7 +124,7 @@ while True:
             agent.load_weights(agent_weights_fname)
         initialize = False
     agent.training = True
-    
+
     obs_now = env
     if obs_last is None:
         obs_last = obs_now
