@@ -57,10 +57,10 @@ while True:
     else:
         nnin = cmd
         print(nnin[-1], end='', flush=True)
+        env_reward -= length_penalty
     idxs = (np.frombuffer(nnin.encode(), dtype=np.uint8) - 32) / 100 
     env = tf.reshape(idxs, idxs.shape + (1,))
     shape = env.shape
-    env_reward -= length_penalty
 
 
     def build_actor_model(shape, nb_actions):
