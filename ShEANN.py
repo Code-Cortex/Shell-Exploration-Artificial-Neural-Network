@@ -58,7 +58,7 @@ while True:
         nnin = cmd
         print(nnin[-1], end='', flush=True)
         env_reward -= length_penalty
-    idxs = (np.frombuffer(nnin.encode(), dtype=np.uint8) - 32) / 100 
+    idxs = (np.frombuffer(nnin.encode(), dtype=np.uint8) - 32) / 100
     env = tf.reshape(idxs, idxs.shape + (1,))
     shape = env.shape
 
@@ -73,13 +73,13 @@ while True:
         return model
 
 
-    def build_main(shape, name_prefix='main.'):
+    def build_embed(shape, name_prefix='embed.'):
         inputs = Input(shape=shape)
         x = inputs
         for layer in range(hidden_layers):
             x = GRU(layer_neurons, name=name_prefix + ('GRU' + str(layer)), return_sequences=True)(x)
         x = GRU(layer_neurons, name=name_prefix + ('GRU' + str(hidden_layers)))(x)
-        model = Model(inputs, x, name=name_prefix + 'main')
+        model = Model(inputs, x, name=name_prefix + 'embed')
         return model
 
 
@@ -103,11 +103,11 @@ while True:
     fwd_weights_fname = '{}_fwd_weights.h5f'.format("SMB")
     agent_weights_fname = '{}_agent_weights.h5f'.format("SMB")
 
-    main = build_main(shape)
-    main2 = build_main(shape, name_prefix='main2.')
-    inverse_model = build_inverse_model(main, main2, nb_actions)
+    embed = build_embed(shape)
+    embed2 = build_embed(shape, name_prefix='embed2.')
+    inverse_model = build_inverse_model(embed, embed2, nb_actions)
     inverse_model.compile(Adam(learning_rate), loss='mse', metrics=['mse'])
-    forward_model = build_forward_model(main, nb_actions)
+    forward_model = build_forward_model(embed, nb_actions)
     forward_model.compile(Adam(learning_rate), loss='mse', metrics=['mse'])
     model = build_actor_model((1,) + shape, nb_actions)
     policy = BoltzmannQPolicy()
@@ -133,7 +133,7 @@ while True:
     icm_action[action] = 1
     inv_loss = inverse_model.train_on_batch([np.expand_dims(obs_last, 0), np.expand_dims(obs_now, 0)],
                                             [np.expand_dims(icm_action, 0)])
-    features_now = main.predict(np.expand_dims(obs_now, 0))
+    features_now = embed.predict(np.expand_dims(obs_now, 0))
     fwd_loss = forward_model.train_on_batch([np.expand_dims(obs_last, 0), np.expand_dims(icm_action, 0)],
                                             [features_now])
     obs_last = obs_now
