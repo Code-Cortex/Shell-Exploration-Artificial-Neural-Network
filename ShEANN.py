@@ -116,13 +116,12 @@ while True:
     agent.compile(Adam(learning_rate), metrics=['mae'])
     agent.reset_states()
 
-    if cmd_in:
-        if os.path.isfile(inv_weights_fname):
-            inverse_model.load_weights(inv_weights_fname)
-        if os.path.isfile(fwd_weights_fname):
-            forward_model.load_weights(fwd_weights_fname)
-        if os.path.isfile(agent_weights_fname):
-            agent.load_weights(agent_weights_fname)
+    if os.path.isfile(inv_weights_fname):
+        inverse_model.load_weights(inv_weights_fname)
+    if os.path.isfile(fwd_weights_fname):
+        forward_model.load_weights(fwd_weights_fname)
+    if os.path.isfile(agent_weights_fname):
+        agent.load_weights(agent_weights_fname)
     agent.training = True
 
     obs_now = env
@@ -140,6 +139,7 @@ while True:
     r_intr = (fwd_loss[0] ** 0.5) / 100
     reward = r_intr + env_reward
     agent.backward(reward, done)
+    clear_session()
     done = False
 
     enc_ascii = action + 32
@@ -151,4 +151,3 @@ while True:
     inverse_model.save_weights(inv_weights_fname, overwrite=True)
     forward_model.save_weights(fwd_weights_fname, overwrite=True)
     agent.save_weights(agent_weights_fname, overwrite=True)
-    clear_session()
