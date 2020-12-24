@@ -1,5 +1,6 @@
 from keras.models import Model, Sequential
 from keras.layers import Input, Concatenate, GRU, Dense, Reshape
+from keras.backend import clear_session
 from keras.optimizers import Adam
 from pathlib import Path
 from subprocess import Popen, PIPE, STDOUT, TimeoutExpired
@@ -145,6 +146,7 @@ while True:
         forward_model.save_weights(fwd_weights_fname, overwrite=True)
         agent.save_weights(agent_weights_fname, overwrite=True)
         done = False
+    clear_session()
 
     enc_ascii = action + 32
     if enc_ascii != 127:
