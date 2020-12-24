@@ -112,10 +112,8 @@ while True:
     embed2 = build_embed(shape, name_prefix='embed2.')
     inverse_model = build_inverse_model(embed, embed2, nb_actions)
     inverse_model.compile(Adam(learning_rate), loss='mse', metrics=['mse'])
-    inverse_model.input_spec = None
     forward_model = build_forward_model(embed, nb_actions)
     forward_model.compile(Adam(learning_rate), loss='mse', metrics=['mse'])
-    forward_model.input_spec = None
     model = build_actor_model((1,) + shape, nb_actions)
     policy = BoltzmannQPolicy()
     agent = SARSAAgent(model=model, nb_actions=nb_actions, policy=policy)
