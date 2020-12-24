@@ -1,7 +1,6 @@
 from keras.models import Model, Sequential
 from keras.layers import Input, Concatenate, GRU, Dense, Reshape
 from keras.optimizers import Adam
-from keras.backend import clear_session
 from pathlib import Path
 from subprocess import Popen, PIPE, STDOUT, TimeoutExpired
 import numpy as np
@@ -57,9 +56,16 @@ while True:
         nnin = cmd
         print(nnin[-1], end='', flush=True)
         env_reward -= length_penalty
-    idxs = (np.frombuffer(nnin.encode(), dtype=np.uint8) - 32) / 100
-    env = tf.reshape(idxs, idxs.shape + (1,))
-    shape = env.shape
+    idxs = (np.frombuffer(nnin.encode(), dtype=np.uint8) - 31) / 100
+    obs_now = tf.reshape(idxs, idxs.shape + (1,))
+    if obs_last is not None:
+        while obs_now.shape[0] > obs_last.shape[0]:
+            obs_last = np.append(obs_last, np.zeros((1, 1)), axis=0)
+        while obs_now.shape[0] < obs_last.shape[0]:
+            obs_now = np.append(obs_now, np.zeros((1, 1)), axis=0)
+    else:
+        obs_last = obs_now
+    shape = obs_now.shape
 
 
     def build_actor_model(shape, nb_actions):
@@ -124,9 +130,6 @@ while True:
         agent.load_weights(agent_weights_fname)
     agent.training = True
 
-    obs_now = env
-    if obs_last is None:
-        obs_last = obs_now
     action = agent.forward(obs_now)
     icm_action = np.zeros(nb_actions)
     icm_action[action] = 1
@@ -144,7 +147,6 @@ while True:
         forward_model.save_weights(fwd_weights_fname, overwrite=True)
         agent.save_weights(agent_weights_fname, overwrite=True)
         done = False
-    clear_session()
 
     enc_ascii = action + 32
     if enc_ascii != 127:
