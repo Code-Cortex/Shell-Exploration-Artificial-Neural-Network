@@ -1,6 +1,5 @@
 from keras.models import Model, Sequential
 from keras.layers import Input, Concatenate, GRU, Dense, Reshape
-from keras.backend import clear_session
 from keras.optimizers import Adam
 from pathlib import Path
 from subprocess import Popen, PIPE, STDOUT, TimeoutExpired
@@ -141,11 +140,11 @@ while True:
     r_intr = (fwd_loss[0] ** 0.5) / 100
     reward = r_intr + env_reward
     agent.backward(reward, done)
-    inverse_model.save_weights(inv_weights_fname, overwrite=True)
-    forward_model.save_weights(fwd_weights_fname, overwrite=True)
-    agent.save_weights(agent_weights_fname, overwrite=True)
-    done = False
-    clear_session()
+    if done:
+        inverse_model.save_weights(inv_weights_fname, overwrite=True)
+        forward_model.save_weights(fwd_weights_fname, overwrite=True)
+        agent.save_weights(agent_weights_fname, overwrite=True)
+        done = False
 
     enc_ascii = action + 32
     if enc_ascii != 127:
