@@ -146,7 +146,7 @@ while True:
         forward_model.save_weights(fwd_weights_fname, overwrite=True)
         agent.save_weights(agent_weights_fname, overwrite=True)
         done = False
-        clear_session()
+    clear_session()
 
     enc_ascii = action + 32
     if enc_ascii != 127:
