@@ -17,7 +17,7 @@ learning_reward = 10
 
 hidden_layers = 4
 layer_neurons = 128
-learning_rate = 0.001
+learning_rate = 0.01
 nb_actions = 96
 
 tf.get_logger().setLevel('ERROR')
