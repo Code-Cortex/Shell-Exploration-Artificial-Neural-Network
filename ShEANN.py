@@ -141,11 +141,7 @@ while True:
     r_intr = (fwd_loss[0] ** 0.5) / 100
     reward = r_intr + env_reward
     agent.backward(reward, done)
-    if done:
-        inverse_model.save_weights(inv_weights_fname, overwrite=True)
-        forward_model.save_weights(fwd_weights_fname, overwrite=True)
-        agent.save_weights(agent_weights_fname, overwrite=True)
-        done = False
+    done = False
     clear_session()
 
     enc_ascii = action + 32
@@ -154,3 +150,6 @@ while True:
         cmd_in = False
         continue
     cmd_in = True
+    inverse_model.save_weights(inv_weights_fname, overwrite=True)
+    forward_model.save_weights(fwd_weights_fname, overwrite=True)
+    agent.save_weights(agent_weights_fname, overwrite=True)
