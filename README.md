@@ -5,4 +5,4 @@ Disclaimers:
 YOU HAVE BEEN WARNED!
 
 Acknowledgements:<br />
-Thank you to jfaubertin, your project "keras-curiosity" was an excelent starting point and guide for my project.
+Thank you to jfaubertin, and Andrew Laird, your projects aided my understanding significantly and provided a great deal of inspiration.
