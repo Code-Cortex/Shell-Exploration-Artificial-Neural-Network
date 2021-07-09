@@ -191,7 +191,7 @@ while True:
     # Reset fitness scores for new round
     # Set new generation weights
     for select in range(len(new_weights)):
-        fitness[select] = -100
+        fitness[select] = starting_fitness
         current_pool[select].set_weights(new_weights[select])  # apply weights to new pool
     if save_current_pool == 1:
         save_pool()
