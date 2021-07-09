@@ -193,5 +193,5 @@ while True:
     for select in range(len(new_weights)):
         fitness[select] = starting_fitness
         current_pool[select].set_weights(new_weights[select])  # apply weights to new pool
-    if save_current_pool == 1:
+    if save_current_pool:
         save_pool()
