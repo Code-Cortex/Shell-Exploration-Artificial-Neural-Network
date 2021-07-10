@@ -33,7 +33,7 @@ best_weights = []
 fitness = []
 init = True
 cmd_in = True
-highest_fitness = -1
+highest_fitness = -100
 term_out = ''
 
 
@@ -91,14 +91,13 @@ def create_model(nb_actions):
     return model
 
 
-def model_mutate(weights):  # ,generation):
-    # mutate each models weights
+def model_mutate(weights):
     for i in range(len(weights)):
         for j in range(len(weights[i])):
-            if random.uniform(0, 1) > .85:  # mutates 15% if the time
-                change = random.uniform(-.5, .5)  # applies a -.5, or +.5 change to the weight
-                weights[i][j] += change  # applies the change to weights variable
-    return weights  # returns the weights variable
+            if random.uniform(0, 1) > .85:
+                change = random.uniform(-.5, .5)
+                weights[i][j] += change
+    return weights
 
 
 def model_crossover(parent1, parent2):
@@ -107,16 +106,16 @@ def model_crossover(parent1, parent2):
     # swap genes
     global current_pool
 
-    weight1 = current_pool[parent1].get_weights()  # is parent1 an iterator
+    weight1 = current_pool[parent1].get_weights()
     weight2 = current_pool[parent2].get_weights()
 
-    new_weight1 = weight1  # temporary variable
-    new_weight2 = weight2  # temporary variable
+    new_weight1 = weight1
+    new_weight2 = weight2
 
     gene = random.randint(0, len(new_weight1) - 1)
 
-    new_weight1[gene] = weight2[gene]  # inserts random gene from weight2 to weight1
-    new_weight2[gene] = weight1[gene]  # inserts random gene from weight1 into weight2
+    new_weight1[gene] = weight2[gene]
+    new_weight2[gene] = weight1[gene]
     return np.asarray([new_weight1, new_weight2])
 
 
@@ -158,14 +157,13 @@ while True:
             continue
     model_num = 0
 
-    # Get top two parents
     parent1 = random.randint(0, total_models - 1)
     parent2 = random.randint(0, total_models - 1)
 
     for i in range(total_models):
         if fitness[i] >= fitness[parent1]:
             parent1 = i
-
+            
     for j in range(total_models):
         if j != parent1:
             if fitness[j] >= fitness[parent2]:
@@ -175,22 +173,18 @@ while True:
             updated = True
             highest_fitness = fitness[select]
             best_weights = current_pool[select].get_weights()
-            print(select)
     for select in range(total_models // 2):
-        # [TODO] #problem is here
-        cross_over_weights = model_crossover(parent1,
-                                             parent2)  # crosses over weights of parent1 and parent2 over all models
+        cross_over_weights = model_crossover(parent1, parent2)
         updated = False
         if not updated:
-            cross_over_weights[1] = best_weights  # use best parent from previous round
-        mutated1 = model_mutate(cross_over_weights[0])  # mutate parent1?
-        mutated2 = model_mutate(cross_over_weights[0])  # mutate parent2?
+            print(best_weights)
+            cross_over_weights[1] = best_weights
+        mutated1 = model_mutate(cross_over_weights[0])
+        mutated2 = model_mutate(cross_over_weights[0])
 
-        new_weights.append(mutated1)  # new weights of parent1
-        new_weights.append(mutated2)  # new weights of parent2
-    # Reset fitness scores for new round
-    # Set new generation weights
-    for select in range(len(new_weights)):
+        new_weights.append(mutated1)
+        new_weights.append(mutated2)
+    for i in range(total_models):
         fitness[select] = starting_fitness
         current_pool[select].set_weights(new_weights[select])  # apply weights to new pool
     if save_current_pool:
