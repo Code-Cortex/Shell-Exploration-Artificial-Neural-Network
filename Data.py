@@ -12,8 +12,8 @@ tf.get_logger().setLevel('ERROR')
 cmd = 'echo Hello World'
 length_penalty = .25
 learning_reward = 10
-array_len = 10000
-max_cmd = 100
+array_len = 100000
+max_cmd = 1000
 
 # model adjustments
 hidden_layers = 8
@@ -21,12 +21,13 @@ layer_neurons = 128
 nb_actions = 96
 model_num = -1
 
-
+# training adjustments
 save_current_pool = True
 load_saved_pool = False
 total_models = 50
 starting_fitness = 1
 
+# variable assignment
 current_pool = []
 new_weights = []
 best_weights = []
@@ -183,8 +184,8 @@ while True:
 
         new_weights.append(mutated1)
         new_weights.append(mutated2)
-    for i in range(total_models):
+    for select in range(len(new_weights)):
         fitness[select] = starting_fitness
-        current_pool[select].set_weights(new_weights[select])  # apply weights to new pool
+        current_pool[select].set_weights(new_weights[select])
     if save_current_pool:
         save_pool()
