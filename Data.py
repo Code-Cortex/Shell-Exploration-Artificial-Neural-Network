@@ -163,7 +163,7 @@ while True:
     for i in range(total_models):
         if fitness[i] >= fitness[parent1]:
             parent1 = i
-            
+
     for j in range(total_models):
         if j != parent1:
             if fitness[j] >= fitness[parent2]:
@@ -177,7 +177,6 @@ while True:
         cross_over_weights = model_crossover(parent1, parent2)
         updated = False
         if not updated:
-            print(best_weights)
             cross_over_weights[1] = best_weights
         mutated1 = model_mutate(cross_over_weights[0])
         mutated2 = model_mutate(cross_over_weights[0])
