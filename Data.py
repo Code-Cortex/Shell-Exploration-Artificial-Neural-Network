@@ -59,10 +59,6 @@ def term_interact(cmd, cmd_in, model_num, init):
         input_data = term_out + ' ' + str(Path.cwd()) + '> '
         filename = Path('mem.txt')
         filename.touch(exist_ok=True)
-        if not term_out:
-            term_out = 'Done!'
-            input_data = term_out + ' ' + str(Path.cwd()) + '> '
-            stdout = input_data
         if not init:
             if exitcode == 0:
                 with open('mem.txt', 'r+') as mem:
