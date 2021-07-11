@@ -1,4 +1,6 @@
 while True:
+    error_count = 0
+    global e
     try:
         from keras.models import Sequential, load_model, save_model
         from keras.layers import GRU, Dense
@@ -41,8 +43,6 @@ while True:
         cmd_in = True
         highest_fitness = -100
         term_out = ''
-        error_count = 0
-        global e
 
         def term_interact(cmd, cmd_in, model_num, init):
             global fitness
