@@ -1,4 +1,4 @@
-from keras.models import Sequential
+from keras.models import Sequential, load_model, save_model
 from keras.layers import GRU, Dense
 from pathlib import Path
 from subprocess import Popen, PIPE, STDOUT, TimeoutExpired
@@ -7,6 +7,7 @@ import tensorflow as tf
 import random
 from keras.backend import clear_session
 from gc import collect
+from datetime import datetime
 
 tf.get_logger().setLevel('ERROR')
 
@@ -25,7 +26,6 @@ model_num = -1
 
 # training adjustments
 save_current_pool = True
-load_saved_pool = False
 total_models = 50
 starting_fitness = 1
 
@@ -39,6 +39,7 @@ cmd_in = True
 highest_fitness = -100
 term_out = ''
 error_count = 0
+global e
 
 while True:
     try:
@@ -127,13 +128,14 @@ while True:
         def save_pool():
             Path("SavedModels/").mkdir(parents=True, exist_ok=True)
             for xi in range(total_models):
-                current_pool[xi].save_weights("SavedModels/model_new" + str(xi) + ".keras")
+                save_model(current_pool[xi],"SavedModels/model_new" + str(xi) + ".keras")
             print("Saved current pool!")
 
 
-        if load_saved_pool:
+        if Path("SavedModels/").is_dir():
             for i in range(total_models):
-                current_pool[i].load_weights("SavedModels/model_new" + str(i) + ".keras")
+                current_pool.append(load_model("SavedModels/model_new" + str(i) + ".keras"))
+                fitness.append(starting_fitness)
         else:
             for i in range(total_models):
                 model = create_model(nb_actions)
@@ -188,7 +190,7 @@ while True:
 
                 new_weights.append(mutated1)
                 new_weights.append(mutated2)
-            for select in range(len(new_weights)):
+            for select in range(total_models):
                 fitness[select] = starting_fitness
                 current_pool[select].set_weights(new_weights[select])
             if save_current_pool:
@@ -196,12 +198,14 @@ while True:
     except Exception as e:
         logfile = Path('error_log.txt')
         logfile.touch(exist_ok=True)
-        with open("error_log.txt", "w") as log:
-            log.write(str(e))
+        with open("error_log.txt", "a") as log:
+            log.write(str(datetime.now())  + ' ' + str(e))
+            log.write('\n')
         clear_session()
         collect()
         error_count += 1
         if error_count <= 10:
             continue
         else:
+            print(e)
             break
