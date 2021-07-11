@@ -25,7 +25,6 @@ nb_actions = 96
 model_num = -1
 
 # training adjustments
-save_current_pool = True
 total_models = 50
 starting_fitness = 1
 
@@ -190,8 +189,7 @@ while True:
             for select in range(total_models):
                 fitness[select] = starting_fitness
                 current_pool[select].set_weights(new_weights[select])
-            if save_current_pool:
-                save_pool()
+            save_pool()
             clear_session()
     except Exception as e:
         logfile = Path('error_log.txt')
