@@ -16,7 +16,7 @@ cmd = 'echo Hello World'
 length_penalty = .25
 learning_reward = 10
 array_len = 10000
-max_cmd = 1000
+max_cmd = 10
 
 # model adjustments
 hidden_layers = 8
@@ -26,7 +26,7 @@ model_num = -1
 
 # training adjustments
 save_current_pool = True
-total_models = 50
+total_models = 10
 starting_fitness = 1
 
 # variable assignment
@@ -36,7 +36,7 @@ best_weights = []
 fitness = []
 init = True
 cmd_in = True
-highest_fitness = -100
+highest_fitness = -110
 term_out = ''
 error_count = 0
 global e
@@ -59,7 +59,7 @@ def term_interact(cmd, cmd_in, model_num, init):
         input_data = term_out + ' ' + str(Path.cwd()) + '> '
         filename = Path('mem.txt')
         filename.touch(exist_ok=True)
-        if not input_data:
+        if not term_out:
             term_out = 'Done!'
             input_data = term_out + ' ' + str(Path.cwd()) + '> '
             stdout = input_data
