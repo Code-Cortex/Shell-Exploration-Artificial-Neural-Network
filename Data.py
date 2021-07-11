@@ -153,10 +153,12 @@ while True:
                         continue
                     else:
                         cmd_in = True
+                        clear_session()
                         continue
                 else:
                     fitness[model_num] -= 100
                     cmd_in = True
+                    clear_session()
                     continue
             model_num = 0
 
@@ -190,14 +192,12 @@ while True:
                 fitness[select] = starting_fitness
                 current_pool[select].set_weights(new_weights[select])
             save_pool()
-            clear_session()
     except Exception as e:
         logfile = Path('error_log.txt')
         logfile.touch(exist_ok=True)
         with open("error_log.txt", "a") as log:
             log.write(str(datetime.now()) + ' ' + str(e))
             log.write('\n')
-        clear_session()
         collect()
         error_count += 1
         if error_count <= 10:
