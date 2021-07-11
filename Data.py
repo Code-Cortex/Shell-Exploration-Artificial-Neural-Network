@@ -192,7 +192,7 @@ while True:
                 current_pool[select].set_weights(new_weights[select])
             if save_current_pool:
                 save_pool()
-                clear_session()
+            clear_session()
     except Exception as e:
         logfile = Path('error_log.txt')
         logfile.touch(exist_ok=True)
