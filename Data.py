@@ -16,7 +16,7 @@ cmd = 'echo Hello World'
 length_penalty = .25
 learning_reward = 10
 array_len = 10000
-max_cmd = 10
+max_cmd = 1000
 
 # model adjustments
 hidden_layers = 8
@@ -26,7 +26,7 @@ model_num = -1
 
 # training adjustments
 save_current_pool = True
-total_models = 10
+total_models = 50
 starting_fitness = 1
 
 # variable assignment
@@ -36,7 +36,7 @@ best_weights = []
 fitness = []
 init = True
 cmd_in = True
-highest_fitness = -110
+highest_fitness = -100
 term_out = ''
 error_count = 0
 global e
