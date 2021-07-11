@@ -1,48 +1,49 @@
-from keras.models import Sequential, load_model, save_model
-from keras.layers import GRU, Dense
-from pathlib import Path
-from subprocess import Popen, PIPE, STDOUT, TimeoutExpired
-import numpy as np
-import tensorflow as tf
-import random
-from keras.backend import clear_session
-from gc import collect
-from datetime import datetime
-
-tf.get_logger().setLevel('ERROR')
-
-# env adjustments
-cmd = 'echo Hello World'
-length_penalty = .25
-learning_reward = 10
-array_len = 100000
-max_cmd = 1000
-
-# model adjustments
-hidden_layers = 8
-layer_neurons = 128
-nb_actions = 96
-model_num = -1
-
-# training adjustments
-save_current_pool = True
-total_models = 50
-starting_fitness = 1
-
-# variable assignment
-current_pool = []
-new_weights = []
-best_weights = []
-fitness = []
-init = True
-cmd_in = True
-highest_fitness = -100
-term_out = ''
-error_count = 0
-global e
-
 while True:
     try:
+        from keras.models import Sequential, load_model, save_model
+        from keras.layers import GRU, Dense
+        from pathlib import Path
+        from subprocess import Popen, PIPE, STDOUT, TimeoutExpired
+        import numpy as np
+        import tensorflow as tf
+        import random
+        from keras.backend import clear_session
+        from numba import cuda
+        from gc import collect
+        from datetime import datetime
+
+        tf.get_logger().setLevel('ERROR')
+
+        # env adjustments
+        cmd = 'echo Hello World'
+        length_penalty = .25
+        learning_reward = 10
+        array_len = 100000
+        max_cmd = 1000
+
+        # model adjustments
+        hidden_layers = 8
+        layer_neurons = 128
+        nb_actions = 96
+        model_num = -1
+
+        # training adjustments
+        save_current_pool = True
+        total_models = 50
+        starting_fitness = 1
+
+        # variable assignment
+        current_pool = []
+        new_weights = []
+        best_weights = []
+        fitness = []
+        init = True
+        cmd_in = True
+        highest_fitness = -100
+        term_out = ''
+        error_count = 0
+        global e
+
         def term_interact(cmd, cmd_in, model_num, init):
             global fitness
             global term_out
@@ -203,6 +204,9 @@ while True:
             log.write('\n')
         clear_session()
         collect()
+        if tf.test.gpu_device_name():
+            cuda.select_device(0)
+            cuda.close()
         error_count += 1
         if error_count <= 10:
             continue
