@@ -19,7 +19,7 @@ array_len = 10000
 max_cmd = 1000
 
 # model adjustments
-hidden_layers = 8
+hidden_layers = 256
 layer_neurons = 128
 nb_actions = 96
 model_num = -1
