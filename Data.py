@@ -5,7 +5,6 @@ from subprocess import Popen, PIPE, STDOUT, TimeoutExpired
 import numpy as np
 import tensorflow as tf
 import random
-from keras.backend import clear_session
 from gc import collect
 from datetime import datetime
 
@@ -148,12 +147,10 @@ while True:
                         continue
                     else:
                         cmd_in = True
-                        clear_session()
                         continue
                 else:
                     fitness[model_num] -= 100
                     cmd_in = True
-                    clear_session()
                     continue
             model_num = 0
 
