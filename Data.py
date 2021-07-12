@@ -6,6 +6,7 @@ import numpy as np
 import tensorflow as tf
 import random
 from gc import collect
+from keras.backend import clear_session
 from datetime import datetime
 
 tf.get_logger().setLevel('ERROR')
@@ -191,7 +192,10 @@ while True:
         with open("error_log.txt", "a") as log:
             log.write(str(datetime.now()) + ' ' + str(e))
             log.write('\n')
+        del model
+        current_pool = []
         collect()
+        clear_session()
         error_count += 1
         if error_count <= 10:
             continue
