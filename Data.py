@@ -137,7 +137,6 @@ while True:
                 init = False
                 if cmd_in:
                     cmd = ''
-                    model_num += 1
                 action = np.argmax(prediction)
                 enc_ascii = action + 32
                 if len(cmd) < max_cmd:
@@ -147,10 +146,12 @@ while True:
                         continue
                     else:
                         cmd_in = True
+                        model_num += 1
                         continue
                 else:
                     fitness[model_num] -= 100
                     cmd_in = True
+                    model_num += 1
                     continue
             model_num = 0
 
