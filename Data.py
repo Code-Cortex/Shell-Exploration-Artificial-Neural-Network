@@ -11,13 +11,13 @@ from datetime import datetime
 tf.get_logger().setLevel('ERROR')
 
 # env adjustments
-cmd = 'echo Hello World'
+cmd = 'echo Hello World!'
 length_penalty = .25
 learning_reward = 10
 max_cmd = 250
 
 # model adjustments
-hidden_layers = 8
+hidden_layers = 32
 layer_neurons = 128
 nb_actions = 96
 model_num = -1
