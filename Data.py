@@ -14,7 +14,7 @@ tf.get_logger().setLevel('ERROR')
 cmd = 'echo Hello World!'
 length_penalty = .25
 learning_reward = 10
-max_cmd = 100
+max_cmd = 250
 
 # model adjustments
 hidden_layers = 32
@@ -89,7 +89,7 @@ def model_mutate(weights):
     for i in range(len(weights)):
         for j in range(len(weights[i])):
             if random.uniform(0, 1) > .85:
-                change = random.uniform(-.1, .1)
+                change = random.uniform(-.5, .5)
                 weights[i][j] += change
     return weights
 
