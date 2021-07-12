@@ -14,7 +14,7 @@ tf.get_logger().setLevel('ERROR')
 cmd = 'echo Hello World!'
 length_penalty = .25
 learning_reward = 10
-max_cmd = 250
+max_cmd = 100
 
 # model adjustments
 hidden_layers = 32
