@@ -15,8 +15,7 @@ tf.get_logger().setLevel('ERROR')
 cmd = 'echo Hello World'
 length_penalty = .25
 learning_reward = 10
-array_len = 10000
-max_cmd = 1000
+max_cmd = 250
 
 # model adjustments
 hidden_layers = 8
@@ -73,11 +72,7 @@ def term_interact(cmd, cmd_in, model_num, init):
         print(input_data[-1], end='', flush=True)
         if not init:
             fitness[model_num] -= length_penalty
-    idxs = np.swapaxes((np.atleast_3d((np.frombuffer(input_data.encode(), dtype=np.uint8) - 31) / 100)), 1, 2)
-    if idxs.shape[2] < array_len:
-        neural_input = np.append(idxs, np.zeros((1, 1, (array_len - idxs.shape[2]))), axis=2)
-    else:
-        neural_input = np.resize(idxs, (1, 1, array_len))
+    neural_input = np.atleast_3d((np.frombuffer(input_data.encode(), dtype=np.uint8) - 31) / 100)
     return neural_input
 
 
