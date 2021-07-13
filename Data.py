@@ -115,6 +115,8 @@ def model_crossover(parent1, parent2):
 
 
 def save_pool():
+    if Path("SavedModels/").is_dir():
+        rmtree(Path("SavedModels/"))
     Path("SavedModels/").mkdir(parents=True, exist_ok=True)
     for xi in range(total_models):
         save_model(current_pool[xi], "SavedModels/model_new" + str(xi) + ".keras", overwrite=True)
