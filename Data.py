@@ -117,7 +117,7 @@ def model_crossover(parent1, parent2):
 def save_pool():
     Path("SavedModels/").mkdir(parents=True, exist_ok=True)
     for xi in range(total_models):
-        save_model(current_pool[xi], "SavedModels/model_new" + str(xi) + ".keras", dtype=object, overwrite=True)
+        save_model(current_pool[xi], "SavedModels/model_new" + str(xi) + ".keras", overwrite=True)
     print("Saved current pool!")
 
 
@@ -134,7 +134,7 @@ while True:
                 current_pool.append(model)
         while True:
             while model_num < total_models:
-                prediction = current_pool[model_num].predict(term_interact(cmd, cmd_in, model_num, init))
+                prediction = current_pool[model_num].predict(term_interact(cmd, cmd_in, model_num, init), batch_size=1)
                 init = False
                 if cmd_in:
                     cmd = ''
@@ -147,13 +147,11 @@ while True:
                         continue
                     else:
                         cmd_in = True
-                        clear_session()
                         model_num += 1
                         continue
                 else:
                     fitness[model_num] -= 100
                     cmd_in = True
-                    clear_session()
                     model_num += 1
                     continue
             model_num = 0
@@ -196,6 +194,7 @@ while True:
             log.write('\n')
         current_pool = []
         collect()
+        clear_session()
         error_count += 1
         if error_count <= 10:
             continue
