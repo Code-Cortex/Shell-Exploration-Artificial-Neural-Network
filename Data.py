@@ -192,7 +192,6 @@ while True:
         with open("error_log.txt", "a") as log:
             log.write(str(datetime.now()) + ' ' + str(e))
             log.write('\n')
-        del model
         current_pool = []
         collect()
         clear_session()
