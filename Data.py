@@ -117,7 +117,7 @@ def model_crossover(parent1, parent2):
 def save_pool():
     Path("SavedModels/").mkdir(parents=True, exist_ok=True)
     for xi in range(total_models):
-        save_model(current_pool[xi], "SavedModels/model_new" + str(xi) + ".keras", overwrite=True)
+        save_model(current_pool[xi], "SavedModels/model_new" + str(xi) + ".keras", dtype=object, overwrite=True)
     print("Saved current pool!")
 
 
@@ -147,11 +147,13 @@ while True:
                         continue
                     else:
                         cmd_in = True
+                        clear_session()
                         model_num += 1
                         continue
                 else:
                     fitness[model_num] -= 100
                     cmd_in = True
+                    clear_session()
                     model_num += 1
                     continue
             model_num = 0
@@ -194,7 +196,6 @@ while True:
             log.write('\n')
         current_pool = []
         collect()
-        clear_session()
         error_count += 1
         if error_count <= 10:
             continue
