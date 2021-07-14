@@ -91,8 +91,8 @@ def create_model(nb_actions):
 def model_mutate(weights):
     for i in range(len(weights)):
         for j in range(len(weights[i])):
-            if random.uniform(0, 1) > .85:
-                change = random.uniform(-.5, .5)
+            if random.uniform(0, 1) > .75:
+                change = random.uniform(-.01, .01)
                 weights[i][j] += change
     return weights
 
