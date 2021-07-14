@@ -1,6 +1,7 @@
 from keras.models import Sequential, load_model, save_model
 from keras.layers import GRU, Dense
 from pathlib import Path
+from shutil import rmtree
 from subprocess import Popen, PIPE, STDOUT, TimeoutExpired
 import numpy as np
 import tensorflow as tf
@@ -116,7 +117,7 @@ def model_crossover(parent1, parent2):
 
 def save_pool():
     if Path("SavedModels/").is_dir():
-        rmtree(Path("SavedModels/"))
+        rmtree("SavedModels/")
     Path("SavedModels/").mkdir(parents=True, exist_ok=True)
     for xi in range(total_models):
         save_model(current_pool[xi], "SavedModels/model_new" + str(xi) + ".keras", overwrite=True)
