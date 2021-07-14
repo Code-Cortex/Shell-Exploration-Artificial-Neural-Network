@@ -13,6 +13,7 @@ from datetime import datetime
 tf.get_logger().setLevel('ERROR')
 
 # env adjustments
+# your "highest_fitness" value should equal max_cmd * length_penalty
 cmd = 'echo Hello World!'
 length_penalty = .25
 learning_reward = 10
@@ -35,7 +36,7 @@ best_weights = []
 fitness = []
 init = True
 cmd_in = True
-highest_fitness = -100
+highest_fitness = -25
 term_out = ''
 error_count = 0
 global e
@@ -97,9 +98,6 @@ def model_mutate(weights):
 
 
 def model_crossover(parent1, parent2):
-    # obtain parent weights
-    # get random gene
-    # swap genes
     global current_pool
 
     weight1 = current_pool[parent1].get_weights()
@@ -153,7 +151,6 @@ while True:
                         model_num += 1
                         continue
                 else:
-                    fitness[model_num] -= 100
                     cmd_in = True
                     model_num += 1
                     continue
