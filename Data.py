@@ -12,8 +12,7 @@ from datetime import datetime
 
 tf.get_logger().setLevel('ERROR')
 
-# env adjustments
-# your "highest_fitness" value should equal max_cmd * length_penalty
+
 cmd = 'echo Hello World!'
 length_penalty = .25
 learning_reward = 10
@@ -37,7 +36,7 @@ best_weights = []
 fitness = []
 init = True
 cmd_in = True
-highest_fitness = -25
+highest_fitness = -(max_cmd * length_penalty)
 term_out = ''
 prev_cmd = ''
 error_count = 0
