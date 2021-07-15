@@ -134,7 +134,7 @@ def save_pool():
 while True:
     try:
         if Path("SavedModels/").is_dir():
-            for i in range(total_models):
+            for i in range(total_models - 1):
                 current_pool.append(load_model("SavedModels/model_new" + str(i) + ".keras"))
                 fitness.append(starting_fitness)
         else:
