@@ -143,7 +143,7 @@ while True:
                 fitness.append(starting_fitness)
                 current_pool.append(model)
         while True:
-            while model_num < total_models:
+            while model_num <= total_models:
                 prediction = current_pool[model_num].predict(term_interact(), batch_size=1)
                 init = False
                 if cmd_in:
