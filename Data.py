@@ -134,7 +134,7 @@ def save_pool():
 while True:
     try:
         if Path("SavedModels/").is_dir():
-            for i in range(total_models - 1):
+            for i in range(total_models):
                 current_pool.append(load_model("SavedModels/model_new" + str(i) + ".keras"))
                 fitness.append(starting_fitness)
         else:
@@ -143,7 +143,7 @@ while True:
                 fitness.append(starting_fitness)
                 current_pool.append(model)
         while True:
-            while model_num < total_models:
+            while model_num < total_models -1:
                 prediction = current_pool[model_num].predict(term_interact(), batch_size=1)
                 init = False
                 if cmd_in:
