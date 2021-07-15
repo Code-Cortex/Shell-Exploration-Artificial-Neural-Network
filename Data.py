@@ -47,6 +47,7 @@ global e
 def term_interact():
     global term_out
     global prev_cmd
+    global model_num
     if cmd_in:
         term_out = ''
         prev_cmd = ''
@@ -72,8 +73,9 @@ def term_interact():
         print('\n')
         print(stdout)
         if not init:
-            print('Model#' + str(model_num) + ' Fitness=' + str(fitness[model_num-1]))
+            print('Model:' + str(model_num) + ' Fitness:' + str(fitness[model_num]))
         print(str(Path.cwd()) + '> ', end='', flush=True)
+        model_num += 1
     else:
         input_data = term_out + ' ' + str(Path.cwd()) + '> ' + cmd
         print(input_data[-1], end='', flush=True)
@@ -156,11 +158,9 @@ while True:
                         continue
                     else:
                         cmd_in = True
-                        model_num += 1
                         continue
                 else:
                     cmd_in = True
-                    model_num += 1
                     continue
             model_num = 0
 
