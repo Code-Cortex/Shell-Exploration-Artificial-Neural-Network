@@ -69,22 +69,21 @@ def term_interact():
                     for line in stdout.splitlines():
                         if line + '\n' not in mem:
                             mem.write(line + '\n')
-                            fitness[model_num] += learning_reward
+                            fitness[model_num+1] += learning_reward
         print('\n')
         print(stdout)
         if not init:
             print('Model:' + str(model_num) + ' Fitness:' + str(fitness[model_num]))
         print(str(Path.cwd()) + '> ', end='', flush=True)
-        print(model_num)
     else:
         input_data = term_out + ' ' + str(Path.cwd()) + '> ' + cmd
         print(input_data[-1], end='', flush=True)
         if prev_cmd:
             if prev_cmd[-1] != cmd[-1]:
-                fitness[model_num] += variety_reward
+                fitness[model_num+1] += variety_reward
         prev_cmd = cmd
         if not init:
-            fitness[model_num] -= length_penalty
+            fitness[model_num+1] -= length_penalty
     neural_input = np.atleast_3d((np.frombuffer(input_data.encode(), dtype=np.uint8) - 31) / 100)
     return neural_input
 
@@ -146,8 +145,6 @@ while True:
         while True:
             while model_num < total_models:
                 prediction = current_pool[model_num].predict(term_interact(), batch_size=1)
-                if cmd_in:
-                    model_num += 1
                 init = False
                 if cmd_in:
                     cmd = ''
@@ -160,9 +157,11 @@ while True:
                         continue
                     else:
                         cmd_in = True
+                        model_num += 1
                         continue
                 else:
                     cmd_in = True
+                    model_num += 1
                     continue
             model_num = 0
 
