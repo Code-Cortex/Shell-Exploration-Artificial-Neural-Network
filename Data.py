@@ -26,7 +26,7 @@ nb_actions = 96
 model_num = -1
 
 # training adjustments
-total_models = 50
+total_models = 25
 starting_fitness = 1
 
 # variable assignment
