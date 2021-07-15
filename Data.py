@@ -190,7 +190,7 @@ while True:
 
                 new_weights.append(mutated1)
                 new_weights.append(mutated2)
-            for select in range(total_models):
+            for select in range(len(new_weights)):
                 fitness[select] = starting_fitness
                 current_pool[select].set_weights(new_weights[select])
             save_pool()
