@@ -75,7 +75,7 @@ def term_interact():
         if not init:
             print('Model:' + str(model_num) + ' Fitness:' + str(fitness[model_num]))
         print(str(Path.cwd()) + '> ', end='', flush=True)
-        model_num += 1
+        print(model_num)
     else:
         input_data = term_out + ' ' + str(Path.cwd()) + '> ' + cmd
         print(input_data[-1], end='', flush=True)
@@ -146,6 +146,8 @@ while True:
         while True:
             while model_num < total_models:
                 prediction = current_pool[model_num].predict(term_interact(), batch_size=1)
+                if cmd_in:
+                    model_num += 1
                 init = False
                 if cmd_in:
                     cmd = ''
