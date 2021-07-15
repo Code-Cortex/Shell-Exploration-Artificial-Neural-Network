@@ -17,6 +17,7 @@ tf.get_logger().setLevel('ERROR')
 cmd = 'echo Hello World!'
 length_penalty = .25
 learning_reward = 10
+variety_reward = 1
 max_cmd = 100
 
 # model adjustments
@@ -27,7 +28,7 @@ model_num = -1
 
 # training adjustments
 total_models = 25
-starting_fitness = 1
+starting_fitness = 0
 
 # variable assignment
 current_pool = []
@@ -38,15 +39,17 @@ init = True
 cmd_in = True
 highest_fitness = -25
 term_out = ''
+prev_cmd = ''
 error_count = 0
 global e
 
 
-def term_interact(cmd, cmd_in, model_num, init):
-    global fitness
+def term_interact():
     global term_out
+    global prev_cmd
     if cmd_in:
         term_out = ''
+        prev_cmd = ''
         proc = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True)
         try:
             stdout = proc.communicate(timeout=1)[0].decode()
@@ -68,17 +71,23 @@ def term_interact(cmd, cmd_in, model_num, init):
                             fitness[model_num] += learning_reward
         print('\n')
         print(stdout)
+        if not init:
+            print('Model#' + str(model_num) + ' Fitness=' + str(fitness[model_num-1]))
         print(str(Path.cwd()) + '> ', end='', flush=True)
     else:
         input_data = term_out + ' ' + str(Path.cwd()) + '> ' + cmd
         print(input_data[-1], end='', flush=True)
+        if prev_cmd:
+            if prev_cmd[-1] != cmd[-1]:
+                fitness[model_num] += variety_reward
+        prev_cmd = cmd
         if not init:
             fitness[model_num] -= length_penalty
     neural_input = np.atleast_3d((np.frombuffer(input_data.encode(), dtype=np.uint8) - 31) / 100)
     return neural_input
 
 
-def create_model(nb_actions):
+def create_model():
     model = Sequential()
     for layer in range(hidden_layers):
         model.add(GRU(layer_neurons, name='GRU' + str(layer), return_sequences=True))
@@ -97,7 +106,7 @@ def model_mutate(weights):
     return weights
 
 
-def model_crossover(parent1, parent2):
+def model_crossover():
     global current_pool
 
     weight1 = current_pool[parent1].get_weights()
@@ -129,12 +138,12 @@ while True:
                 fitness.append(starting_fitness)
         else:
             for i in range(total_models):
-                model = create_model(nb_actions)
+                model = create_model()
                 fitness.append(starting_fitness)
                 current_pool.append(model)
         while True:
             while model_num < total_models:
-                prediction = current_pool[model_num].predict(term_interact(cmd, cmd_in, model_num, init), batch_size=1)
+                prediction = current_pool[model_num].predict(term_interact(), batch_size=1)
                 init = False
                 if cmd_in:
                     cmd = ''
@@ -172,7 +181,7 @@ while True:
                     highest_fitness = fitness[select]
                     best_weights = current_pool[select].get_weights()
             for select in range(total_models // 2):
-                cross_over_weights = model_crossover(parent1, parent2)
+                cross_over_weights = model_crossover()
                 updated = False
                 if not updated:
                     cross_over_weights[1] = best_weights
