@@ -28,6 +28,9 @@ model_num = 0
 # training adjustments
 total_models = 25
 starting_fitness = 0
+# maximum and minimum percentage mutated
+mutation_max = 85
+mutation_min = 15
 
 # variable assignment
 current_pool = []
@@ -41,6 +44,9 @@ term_out = ''
 prev_cmd = ''
 error_count = 0
 global e
+mutation_rate = .5
+mutation_max = round(1 - (mutation_max / 100), 2)
+mutation_min = round(1 - (mutation_min / 100), 2)
 
 
 def term_interact():
@@ -97,9 +103,16 @@ def create_model():
 
 
 def model_mutate(weights):
+    global mutation_rate
+    if mutation_rate < mutation_min:
+        if updated:
+            mutation_rate += .01
+    if mutation_rate > mutation_max:
+        if not updated:
+            mutation_rate -= .01
     for i in range(len(weights)):
         for j in range(len(weights[i])):
-            if random.uniform(0, 1) > .85:
+            if random.uniform(0, 1) > mutation_rate:
                 change = random.uniform(-.01, .01)
                 weights[i][j] += change
     return weights
