@@ -20,7 +20,7 @@ variety_reward = 1
 max_cmd = 100
 
 # model adjustments
-hidden_layers = 16
+hidden_layers = 32
 layer_neurons = 128
 nb_actions = 96
 model_num = 0
