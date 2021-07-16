@@ -29,8 +29,8 @@ model_num = 0
 total_models = 25
 starting_fitness = 0
 # maximum and minimum percentage mutated
-mutation_max = 85
-mutation_min = 15
+mutation_max = 50
+mutation_min = 10
 
 # variable assignment
 current_pool = []
@@ -44,7 +44,7 @@ term_out = ''
 prev_cmd = ''
 error_count = 0
 global e
-mutation_rate = .5
+mutation_rate = round(((mutation_max + mutation_min) / 2) / 100, 2)
 mutation_max = round(1 - (mutation_max / 100), 2)
 mutation_min = round(1 - (mutation_min / 100), 2)
 
