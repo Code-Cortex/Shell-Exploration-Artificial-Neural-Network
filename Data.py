@@ -101,6 +101,7 @@ def create_model():
     model.compile(loss='mse', optimizer='adam')
     return model
 
+
 def update_mutation():
     global mutation_rate
     if mutation_rate < mutation_min:
@@ -109,7 +110,7 @@ def update_mutation():
     if mutation_rate > mutation_max:
         if not updated:
             mutation_rate -= .01
-    print((1- mutation_rate) * 100)
+
 
 def model_mutate(weights):
     global mutation_rate
