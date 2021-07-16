@@ -29,7 +29,7 @@ model_num = 0
 total_models = 25
 starting_fitness = 0
 # maximum and minimum percentage mutated
-mutation_max = 50
+mutation_max = 25
 mutation_min = 10
 
 # variable assignment
