@@ -101,8 +101,7 @@ def create_model():
     model.compile(loss='mse', optimizer='adam')
     return model
 
-
-def model_mutate(weights):
+def update_mutation():
     global mutation_rate
     if mutation_rate < mutation_min:
         if updated:
@@ -110,6 +109,10 @@ def model_mutate(weights):
     if mutation_rate > mutation_max:
         if not updated:
             mutation_rate -= .01
+    print((1- mutation_rate) * 100)
+
+def model_mutate(weights):
+    global mutation_rate
     for i in range(len(weights)):
         for j in range(len(weights[i])):
             if random.uniform(0, 1) > mutation_rate:
@@ -185,14 +188,15 @@ while True:
                 if j != parent1:
                     if fitness[j] >= fitness[parent2]:
                         parent2 = j
+            updated = False
             for select in range(total_models):
                 if fitness[select] >= highest_fitness:
                     updated = True
                     highest_fitness = fitness[select]
                     best_weights = current_pool[select].get_weights()
+            update_mutation()
             for select in range(total_models // 2):
                 cross_over_weights = model_crossover()
-                updated = False
                 if not updated:
                     cross_over_weights[1] = best_weights
                 mutated1 = model_mutate(cross_over_weights[0])
