@@ -102,16 +102,6 @@ def create_model():
     return model
 
 
-def update_mutation():
-    global mutation_rate
-    if mutation_rate < mutation_min:
-        if updated:
-            mutation_rate += .01
-    if mutation_rate > mutation_max:
-        if not updated:
-            mutation_rate -= .01
-
-
 def model_mutate(weights):
     global mutation_rate
     for i in range(len(weights)):
@@ -195,7 +185,12 @@ while True:
                     updated = True
                     highest_fitness = fitness[select]
                     best_weights = current_pool[select].get_weights()
-            update_mutation()
+            if mutation_rate < mutation_min:
+                if updated:
+                    mutation_rate += .01
+            if mutation_rate > mutation_max:
+                if not updated:
+                    mutation_rate -= .01
             for select in range(total_models // 2):
                 cross_over_weights = model_crossover()
                 if not updated:
