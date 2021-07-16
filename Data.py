@@ -99,7 +99,7 @@ def create_model():
 def model_mutate(weights):
     for i in range(len(weights)):
         for j in range(len(weights[i])):
-            if random.uniform(0, 1) > .75:
+            if random.uniform(0, 1) > .85:
                 change = random.uniform(-.005, .005)
                 weights[i][j] += change
     return weights
@@ -191,6 +191,7 @@ while True:
                 fitness[select] = starting_fitness
                 current_pool[select].set_weights(new_weights[select])
             save_pool()
+            clear_session()
     except Exception as e:
         logfile = Path('error_log.txt')
         logfile.touch(exist_ok=True)
@@ -198,7 +199,6 @@ while True:
             log.write(str(datetime.now()) + ' ' + str(e))
             log.write('\n')
         collect()
-        clear_session()
         error_count += 1
         if error_count <= 10:
             continue
