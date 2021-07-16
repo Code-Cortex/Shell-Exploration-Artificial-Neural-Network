@@ -20,7 +20,7 @@ variety_reward = 1
 max_cmd = 100
 
 # model adjustments
-hidden_layers = 32
+hidden_layers = 16
 layer_neurons = 128
 nb_actions = 96
 model_num = 0
@@ -191,7 +191,6 @@ while True:
                 fitness[select] = starting_fitness
                 current_pool[select].set_weights(new_weights[select])
             save_pool()
-            clear_session()
     except Exception as e:
         logfile = Path('error_log.txt')
         logfile.touch(exist_ok=True)
@@ -199,6 +198,7 @@ while True:
             log.write(str(datetime.now()) + ' ' + str(e))
             log.write('\n')
         collect()
+        clear_session()
         error_count += 1
         if error_count <= 10:
             continue
