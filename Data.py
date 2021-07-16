@@ -17,7 +17,7 @@ cmd = 'echo Hello World!'
 length_penalty = .25
 learning_reward = 10
 variety_reward = 1
-max_cmd = 10
+max_cmd = 100
 
 # model adjustments
 hidden_layers = 32
@@ -26,7 +26,7 @@ nb_actions = 96
 model_num = 0
 
 # training adjustments
-total_models = 10
+total_models = 25
 starting_fitness = 0
 
 # variable assignment
@@ -99,9 +99,8 @@ def create_model():
 def model_mutate(weights):
     for i in range(len(weights)):
         for j in range(len(weights[i])):
-            if random.uniform(0, 1) > .85:
+            if random.uniform(0, 1) > .75:
                 change = random.uniform(-.005, .005)
-                print(random.uniform(-.005, .005))
                 weights[i][j] += change
     return weights
 
@@ -161,8 +160,6 @@ while True:
                     model_num += 1
                     continue
             model_num = 0
-            for i in range(total_models):
-                print('\n' + 'model#' + str(i) + 'fitness=' +str(fitness[i]))
 
             parent1 = random.randint(0, total_models - 1)
             parent2 = random.randint(0, total_models - 1)
@@ -194,7 +191,6 @@ while True:
                 fitness[select] = starting_fitness
                 current_pool[select].set_weights(new_weights[select])
             save_pool()
-            clear_session()
     except Exception as e:
         logfile = Path('error_log.txt')
         logfile.touch(exist_ok=True)
@@ -202,6 +198,7 @@ while True:
             log.write(str(datetime.now()) + ' ' + str(e))
             log.write('\n')
         collect()
+        clear_session()
         error_count += 1
         if error_count <= 10:
             continue
