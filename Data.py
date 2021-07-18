@@ -129,7 +129,7 @@ def model_crossover():
 
 
 def cleanup():
-    global new_weights
+    global mutated1, mutated2, new_weights, parent1, parent2, cross_over_weights, prediction, action, enc_ascii
     del mutated1, mutated2, new_weights, parent1, parent2, cross_over_weights, prediction, action, enc_ascii
     new_weights = []
     clear_session()
@@ -209,7 +209,7 @@ while True:
 
                 new_weights.append(mutated1)
                 new_weights.append(mutated2)
-            for select in range(total_models):
+            for select in range(len(new_weights)):
                 fitness[select] = starting_fitness
                 current_pool[select].set_weights(new_weights[select])
             cleanup()
