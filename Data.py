@@ -130,7 +130,10 @@ def model_crossover():
 
 def generate_pool():
     global current_pool
+    global fitness
     del current_pool
+    del fitness
+    fitness = []
     current_pool = []
     for i in range(total_models):
         model = create_model()
@@ -140,7 +143,7 @@ def generate_pool():
 
 def cleanup():
     global new_weights
-    del mutated1, mutated2, new_weights, parent1, parent2, cross_over_weights
+    del mutated1, mutated2, new_weights, parent1, parent2, cross_over_weights, prediction, action, enc_ascii
     new_weights = []
     clear_session()
     collect()
@@ -218,7 +221,6 @@ while True:
 
             generate_pool()
             for select in range(total_models):
-                fitness[select] = starting_fitness
                 current_pool[select].set_weights(new_weights[select])
             cleanup()
             save_pool()
