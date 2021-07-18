@@ -33,9 +33,9 @@ mutation_max = 85
 mutation_min = 10
 
 # variable assignment
-current_pool = []
 new_weights = []
 best_weights = []
+current_pool = []
 fitness = []
 init = True
 cmd_in = True
@@ -128,6 +128,23 @@ def model_crossover():
     return np.asarray([new_weight1, new_weight2])
 
 
+def generate_pool():
+    global current_pool
+    del current_pool
+    current_pool = []
+    for i in range(total_models):
+        model = create_model()
+        fitness.append(starting_fitness)
+        current_pool.append(model)
+
+
+def cleanup():
+    global new_weights
+    del mutated1, mutated2, new_weights, parent1, parent2, cross_over_weights
+    clear_session()
+    collect()
+    new_weights = []
+
 def save_pool():
     if Path("SavedModels/").is_dir():
         rmtree("SavedModels/")
@@ -143,10 +160,8 @@ while True:
                 current_pool.append(load_model("SavedModels/model_new" + str(i) + ".keras"))
                 fitness.append(starting_fitness)
         else:
-            for i in range(total_models):
-                model = create_model()
-                fitness.append(starting_fitness)
-                current_pool.append(model)
+            generate_pool()
+
         while True:
             while model_num < total_models:
                 prediction = current_pool[model_num].predict(term_interact(), batch_size=1)
@@ -200,18 +215,21 @@ while True:
 
                 new_weights.append(mutated1)
                 new_weights.append(mutated2)
+
+            generate_pool()
             for select in range(total_models):
                 fitness[select] = starting_fitness
                 current_pool[select].set_weights(new_weights[select])
+            cleanup()
             save_pool()
+            
     except Exception as e:
         logfile = Path('error_log.txt')
         logfile.touch(exist_ok=True)
         with open("error_log.txt", "a") as log:
             log.write(str(datetime.now()) + ' ' + str(e))
             log.write('\n')
-        collect()
-        clear_session()
+        cleanup()
         error_count += 1
         if error_count <= 10:
             continue
