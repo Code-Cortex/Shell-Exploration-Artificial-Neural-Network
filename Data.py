@@ -141,9 +141,9 @@ def generate_pool():
 def cleanup():
     global new_weights
     del mutated1, mutated2, new_weights, parent1, parent2, cross_over_weights
+    new_weights = []
     clear_session()
     collect()
-    new_weights = []
 
 def save_pool():
     if Path("SavedModels/").is_dir():
@@ -222,7 +222,7 @@ while True:
                 current_pool[select].set_weights(new_weights[select])
             cleanup()
             save_pool()
-            
+
     except Exception as e:
         logfile = Path('error_log.txt')
         logfile.touch(exist_ok=True)
