@@ -231,7 +231,6 @@ while True:
         with open("error_log.txt", "a") as log:
             log.write(str(datetime.now()) + ' ' + str(e))
             log.write('\n')
-        cleanup()
         error_count += 1
         if error_count <= 10:
             continue
