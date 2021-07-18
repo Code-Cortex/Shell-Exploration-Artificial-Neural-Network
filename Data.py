@@ -26,7 +26,7 @@ nb_actions = 96
 model_num = 0
 
 # training adjustments
-total_models = 50
+total_models = 25
 starting_fitness = 0
 # maximum and minimum percentage mutated
 mutation_max = 85
@@ -128,25 +128,13 @@ def model_crossover():
     return np.asarray([new_weight1, new_weight2])
 
 
-def generate_pool():
-    global current_pool
-    global fitness
-    del current_pool
-    del fitness
-    fitness = []
-    current_pool = []
-    for i in range(total_models):
-        model = create_model()
-        fitness.append(starting_fitness)
-        current_pool.append(model)
-
-
 def cleanup():
     global new_weights
     del mutated1, mutated2, new_weights, parent1, parent2, cross_over_weights, prediction, action, enc_ascii
     new_weights = []
     clear_session()
     collect()
+
 
 def save_pool():
     if Path("SavedModels/").is_dir():
@@ -163,7 +151,10 @@ while True:
                 current_pool.append(load_model("SavedModels/model_new" + str(i) + ".keras"))
                 fitness.append(starting_fitness)
         else:
-            generate_pool()
+            for i in range(total_models):
+                model = create_model()
+                fitness.append(starting_fitness)
+                current_pool.append(model)
 
         while True:
             while model_num < total_models:
@@ -218,9 +209,8 @@ while True:
 
                 new_weights.append(mutated1)
                 new_weights.append(mutated2)
-
-            generate_pool()
             for select in range(total_models):
+                fitness[select] = starting_fitness
                 current_pool[select].set_weights(new_weights[select])
             cleanup()
             save_pool()
