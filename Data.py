@@ -50,9 +50,7 @@ mutation_min = round(1 - (mutation_min / 100), 2)
 
 
 def term_interact():
-    global term_out
-    global cmd
-    global prev_cmd
+    global term_out, cmd, prev_cmd
     if cmd_in:
         term_out = ''
         prev_cmd = ''
